@@ -119,7 +119,6 @@ def apply_kernel(image, kernel):
             
             new_image[row_index][column_index] = updated_pixel_value
 
-    print(new_image)
     return new_image
 
 
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     separated = separate_channels(img)
     
     ex5_helper.show_image(img)
-    blured = apply_kernel([separated[0]], blur_kernel(3))
+    blured = apply_kernel(separated[0], blur_kernel(3))
     # grayed = RGB2grayscale(img)
 
     ex5_helper.show_image(blured)
