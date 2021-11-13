@@ -3,7 +3,7 @@ import math
 
 import ex5_helper
 
-def separate_channels(image):
+def separate_channels(image: list) -> list:
     """
     Breaks down the a 3d array into a list of 2d arrays
 
@@ -27,7 +27,7 @@ def separate_channels(image):
 
     return separated
 
-def combine_channels(channels):
+def combine_channels(channels: list) -> list:
     """
     Combines a list of 2d arrays into a 3d array
 
@@ -52,7 +52,7 @@ def combine_channels(channels):
     return combined
 
 
-def RGB2grayscale(colored_image):
+def RGB2grayscale(colored_image: list) -> list:
     """
     Grayscales an RGB image through the formula: RED * 0.299 + GREEN * 0.587 + BLUE * 0.114
     Each pixel is being set the combined value of all 3 channels
@@ -73,7 +73,7 @@ def RGB2grayscale(colored_image):
     return grayed_image
 
 
-def blur_kernel(size):
+def blur_kernel(size: int) -> list:
     """
     Creates a kernel blur array of size
     """
@@ -87,7 +87,7 @@ def blur_kernel(size):
 
     return kernel_array
 
-def apply_kernel(image, kernel):
+def apply_kernel(image: list, kernel: list) -> list:
     """
     Applies the Kernel Box Blur to the given image in ${image}
     The image is represented by a single channel as a 2d array
@@ -125,18 +125,19 @@ def apply_kernel(image, kernel):
     return new_image
 
 
-def bilinear_interpolation(image, y, x):
+def bilinear_interpolation(image: list, y: float, x: float) -> int:
     """
     Invokes the bilinear interpolation resampling method.
     Calculates a pixel's value through percentages based on how close
     the pixel is to nearby pixels
     """
 
-    y_rounded = math.floor(y) # 0
-    x_rounded = math.floor(x) # 0
+    y_rounded = math.floor(y)
+    x_rounded = math.floor(x)
 
-    y_axis_perc = y - math.floor(y) # 0.5 - 0 = 0.5
-    x_axis_perc = x - math.floor(x) # 0.5 - 0 = 0.5
+    y_axis_perc = y - math.floor(y)
+    x_axis_perc = x - math.floor(x)
+
 
     # Getting the indexes of all 4 nearby pixels
     nearby_pixels = {
@@ -186,7 +187,7 @@ def bilinear_interpolation(image, y, x):
 
     return updated_pixel_value
 
-def resize(image, new_height, new_width):
+def resize(image: list, new_height: int, new_width: int) -> list:
     """
     Resizes the given image in ${image}, as a 2d array
     to ${new_width} x ${new_height}
@@ -207,9 +208,6 @@ def resize(image, new_height, new_width):
             relative_y_val = ((row_index) / new_width) * amnt_of_rows
             relative_x_val = ((column_index) / new_height) * amnt_of_columns
 
-            print("relative_y_val: " + str(relative_y_val))
-            print("relative_x_val: " + str(relative_x_val))
-
             updated_pixel_value = bilinear_interpolation(image, relative_y_val, relative_x_val)
             updated_row.append(updated_pixel_value)
             
@@ -221,18 +219,45 @@ def resize(image, new_height, new_width):
     return updated_image
 
 
+def rotate_90(image: list, direction: str) -> list:
+    # [[1, 2, 3], [4, 5, 6]]
+    # [[(1, 2)]]
+    amnt_of_rows = len(image)
+    amnt_of_columns = len(image[0])
+
+    rotated = [[] for i in range(amnt_of_columns)]
+
+    if direction == "R":
+        for row_index in range(len(image) - 1, -1, -1):
+            for column_index in range(0, len(image[row_index])):
+                rotated[column_index].append(image[row_index][column_index])
+                
+    elif direction == "L":
+        for row_index in range(0, len(image)):
+            for column_index in range(len(image[row_index]) - 1, -1, -1):
+                rotated[len(image[row_index]) - 1 - column_index].append(image[row_index][column_index])
+
+    return rotated
+
+
+
+
 if __name__ == "__main__":
-    img = ex5_helper.load_image("examples/test.jpg")
+    img = ex5_helper.load_image("examples/girl.jpg")
     separated = separate_channels(img)
     
     # ex5_helper.show_image(img)
     # blured = apply_kernel(separated[0], blur_kernel(3))
     # grayed = RGB2grayscale(img)
-    separated[0] = resize(separated[0], 8, 8)
+    # separated[0] = resize(separated[0], 8, 8)
     # separated[1] = resize(separated[1], 8, 8)
     # separated[2] = resize(separated[2], 8, 8)
 
     # combined = combine_channels(separated)
 
     # ex5_helper.show_image(combined)
-    ex5_helper.show_image(separated[0])
+    # ex5_helper.show_image(separated[0])
+    
+    img = rotate_90(img, "L")
+    ex5_helper.show_image(img)
+    
