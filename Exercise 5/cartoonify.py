@@ -220,9 +220,6 @@ def resize(image: list, new_height: int, new_width: int) -> list:
 
 
 def rotate_90(image: list, direction: str) -> list:
-    # [[1, 2, 3], [4, 5, 6]]
-    # [[(1, 2)]]
-    amnt_of_rows = len(image)
     amnt_of_columns = len(image[0])
 
     rotated = [[] for i in range(amnt_of_columns)]
@@ -257,7 +254,7 @@ if __name__ == "__main__":
 
     # ex5_helper.show_image(combined)
     # ex5_helper.show_image(separated[0])
-    
+
     img = rotate_90(img, "L")
     ex5_helper.show_image(img)
     
