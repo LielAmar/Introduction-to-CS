@@ -1,4 +1,6 @@
 # import PIL
+import math
+
 import ex5_helper
 
 def separate_channels(image):
@@ -65,7 +67,7 @@ def RGB2grayscale(colored_image):
         for column_index in range(amnt_of_clmns):
             column = colored_image[row_index][column_index]
 
-            updated_value = int(round(column[0] * 0.299 + column[1] * 0.587 + column[2] * 0.114))
+            updated_value = round(column[0] * 0.299 + column[1] * 0.587 + column[2] * 0.114)
             grayed_image[row_index][column_index] = updated_value
 
     return grayed_image
@@ -88,6 +90,7 @@ def blur_kernel(size):
 def apply_kernel(image, kernel):
     """
     Applies the Kernel Box Blur to the given image in ${image}
+    The image is represented by a single channel as a 2d array
     """
 
     kernel_size = len(kernel)
@@ -113,7 +116,7 @@ def apply_kernel(image, kernel):
 
                     updated_pixel_value += (image[pixel_row][pixel_column] * kernel_value)
 
-            updated_pixel_value = int(round(updated_pixel_value))
+            updated_pixel_value = round(updated_pixel_value)
             updated_pixel_value = max(0, updated_pixel_value)
             updated_pixel_value = min(255, updated_pixel_value)
             
@@ -121,6 +124,53 @@ def apply_kernel(image, kernel):
 
     return new_image
 
+
+def bilinear_interpolation(image, y, x):
+    """
+    Invokes the bilinear interpolation resampling method.
+    Calculates a pixel's value through percentages based on how close
+    the pixel is to nearby pixels
+    """
+
+    y_rounded = round(y)
+
+    y_axis_perc = y - math.floor(y)
+    x_axis_perc = x - math.floor(x)
+
+    # Getting the indexes of all 4 nearby pixels
+    nearby_pixels = {
+        "top_left": (math.floor(y), math.floor(x)),
+        "bot_left": (math.floor(y+1), math.floor(x)),
+        "top_right": (math.floor(y), math.floor(x+1)),
+        "bot_right": (math.floor(y+1), math.floor(x+1))
+    }
+    
+    # Looping over all nearby pixel. If a pixel is outside the image borders
+    # we want to set its calculated value to 0 so it doesn't affect the final
+    # calculation of the updated pixel value
+    for key, pixel in nearby_pixels.items():
+        if (pixel[0] < 0 or pixel[0] >= len(image)
+                or pixel[1] < 0 or pixel[1] >= len(image[y_rounded])):
+            # Pixel is outside the image's border
+            nearby_pixels[key] = 0
+        else:
+            # Pixel is inside the image's border
+            nearby_pixels[key] = image[pixel[0]][pixel[1]]
+
+    # Calculating the pixel's new value
+    updated_pixel_value = (nearby_pixels["top_left"] * (1 - x_axis_perc) * (1 - y_axis_perc)
+                        + nearby_pixels["bot_left"] * y_axis_perc * (1 - x_axis_perc)
+                        + nearby_pixels["top_right"] * x * (1 - y_axis_perc)
+                        + nearby_pixels["bot_right"] * x_axis_perc * y_axis_perc)
+    updated_pixel_value = round(updated_pixel_value)
+
+    return updated_pixel_value
+
+def resize(image, new_height, new_width):
+    """
+    Resizes the given image in ${image} to ${new_width} x ${new_height}
+    """
+    pass
 
 
 if __name__ == "__main__":
