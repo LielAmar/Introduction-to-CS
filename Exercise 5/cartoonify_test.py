@@ -45,9 +45,13 @@ def test_bilinear_interpolation_function():
     assert bilinear_interpolation([[0, 64], [128, 255]], 0.5, 0.5) == 112
     assert bilinear_interpolation([[0, 64], [128, 255]], 0.5, 1) == 160
 
+def test_resize_function():
+  assert bilinear_interpolation([[0, 64], [128, 255]], 3, 3) == None
+
 # bilinear_interpolation([[0, 64], [128, 255]], 1, 1) == 255
 # bilinear_interpolation([[0, 64], [128, 255]], 0.5, 0.5) == 112
 # bilinear_interpolation([[0, 64], [128, 255]], 0.5, 1) == 160
+
 
 
 

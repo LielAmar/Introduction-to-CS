@@ -132,53 +132,107 @@ def bilinear_interpolation(image, y, x):
     the pixel is to nearby pixels
     """
 
-    y_rounded = round(y)
+    y_rounded = math.floor(y) # 0
+    x_rounded = math.floor(x) # 0
 
-    y_axis_perc = y - math.floor(y)
-    x_axis_perc = x - math.floor(x)
+    y_axis_perc = y - math.floor(y) # 0.5 - 0 = 0.5
+    x_axis_perc = x - math.floor(x) # 0.5 - 0 = 0.5
 
     # Getting the indexes of all 4 nearby pixels
     nearby_pixels = {
-        "top_left": (math.floor(y), math.floor(x)),
-        "bot_left": (math.floor(y+1), math.floor(x)),
-        "top_right": (math.floor(y), math.floor(x+1)),
-        "bot_right": (math.floor(y+1), math.floor(x+1))
+        "top_left": (math.floor(y), math.floor(x)),      # 0, 0
+        "bot_left": (math.floor(y+1), math.floor(x)),    # 1, 0
+        "top_right": (math.floor(y), math.floor(x+1)),   # 0, 1
+        "bot_right": (math.floor(y+1), math.floor(x+1))  # 1, 1
     }
     
     # Looping over all nearby pixel. If a pixel is outside the image borders
     # we want to set its calculated value to 0 so it doesn't affect the final
     # calculation of the updated pixel value
     for key, pixel in nearby_pixels.items():
+        # print("pixel: " + str(pixel))
+
         if (pixel[0] < 0 or pixel[0] >= len(image)
                 or pixel[1] < 0 or pixel[1] >= len(image[y_rounded])):
             # Pixel is outside the image's border
-            nearby_pixels[key] = 0
+            nearby_pixels[key] = image[y_rounded][x_rounded]
         else:
             # Pixel is inside the image's border
             nearby_pixels[key] = image[pixel[0]][pixel[1]]
 
+    print("nearby_pixels: " + str(nearby_pixels))
+
+    updated_pixel_value = 0
+
+    # if nearby_pixels["top_left"] != -1:
+    #     updated_pixel_value += nearby_pixels["top_left"] * (1 - x_axis_perc) * (1 - y_axis_perc)
+    # if nearby_pixels["bot_left"] != -1:
+    #     updated_pixel_value += nearby_pixels["bot_left"] * y_axis_perc * (1 - x_axis_perc)
+    # if nearby_pixels["top_right"] != -1:
+    #     updated_pixel_value += nearby_pixels["top_right"] * x_axis_perc * (1 - y_axis_perc)
+    # if nearby_pixels["bot_right"] != -1:
+    #     updated_pixel_value += nearby_pixels["bot_right"] * x_axis_perc * y_axis_perc
+
     # Calculating the pixel's new value
-    updated_pixel_value = (nearby_pixels["top_left"] * (1 - x_axis_perc) * (1 - y_axis_perc)
-                        + nearby_pixels["bot_left"] * y_axis_perc * (1 - x_axis_perc)
-                        + nearby_pixels["top_right"] * x * (1 - y_axis_perc)
-                        + nearby_pixels["bot_right"] * x_axis_perc * y_axis_perc)
+    updated_pixel_value = (
+    max(0, min(
+              nearby_pixels["top_left"]  * (1 - x_axis_perc) * (1 - y_axis_perc)
+            + nearby_pixels["bot_left"]  * y_axis_perc * (1 - x_axis_perc)
+            + nearby_pixels["top_right"] * x_axis_perc * (1 - y_axis_perc)
+            + nearby_pixels["bot_right"] * x_axis_perc * y_axis_perc
+    , 255))
+    )
     updated_pixel_value = round(updated_pixel_value)
 
     return updated_pixel_value
 
 def resize(image, new_height, new_width):
     """
-    Resizes the given image in ${image} to ${new_width} x ${new_height}
+    Resizes the given image in ${image}, as a 2d array
+    to ${new_width} x ${new_height}
     """
-    pass
+    updated_image = []
+
+    amnt_of_rows = len(image)
+    amnt_of_columns = len(image[0])
+
+    for row_index in range(new_height):
+        updated_row = []
+        
+        for column_index in range(new_width):
+            # relative_y_val = ((0.5 + row_index) / new_width) * amnt_of_rows
+            # relative_x_val = ((0.5 + column_index) / new_height) * amnt_of_columns
+            # relative_y_val = (row_index * amnt_of_rows) / new_width
+            # relative_x_val = (column_index * amnt_of_columns) / new_height
+            relative_y_val = ((row_index) / new_width) * amnt_of_rows
+            relative_x_val = ((column_index) / new_height) * amnt_of_columns
+
+            print("relative_y_val: " + str(relative_y_val))
+            print("relative_x_val: " + str(relative_x_val))
+
+            updated_pixel_value = bilinear_interpolation(image, relative_y_val, relative_x_val)
+            updated_row.append(updated_pixel_value)
+            
+            # updated_row.append(updated_column)
+
+        # updated_row
+        updated_image.append(updated_row)
+
+    return updated_image
 
 
 if __name__ == "__main__":
-    img = ex5_helper.load_image("examples/girl.jpg")
+    img = ex5_helper.load_image("examples/test.jpg")
     separated = separate_channels(img)
     
-    ex5_helper.show_image(img)
-    blured = apply_kernel(separated[0], blur_kernel(3))
+    # ex5_helper.show_image(img)
+    # blured = apply_kernel(separated[0], blur_kernel(3))
     # grayed = RGB2grayscale(img)
+    separated[0] = resize(separated[0], 8, 8)
+    # separated[1] = resize(separated[1], 8, 8)
+    # separated[2] = resize(separated[2], 8, 8)
 
-    ex5_helper.show_image(blured)
+    # combined = combine_channels(separated)
+
+    # ex5_helper.show_image(combined)
+    ex5_helper.show_image(separated[0])
