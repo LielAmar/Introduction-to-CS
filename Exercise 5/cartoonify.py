@@ -101,6 +101,9 @@ def apply_kernel(image: list, kernel: list) -> list:
 
     for row_index in range(len(new_image)):
         for column_index in range(len(image[row_index])):
+            print("row_index: " + str(row_index))
+            print("column_index: " + str(column_index))
+
             updated_pixel_value = 0
 
             for i in range(0 - int((kernel_size / 2)), 0 + int((kernel_size / 2) + 1)):
@@ -224,22 +227,77 @@ def rotate_90(image: list, direction: str) -> list:
     return rotated
 
 
+def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
+    blurred = apply_kernel(image, blur_kernel(blur_size))
+    print("blured image")
+
+    amnt_of_rows = len(blurred)
+    amnt_of_clmns = len(blurred[0])
+
+    r = block_size//2
+
+    edged: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+
+    for row_index in range(amnt_of_rows):
+        for column_index in range(amnt_of_clmns):
+
+            treshold: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+
+            avg = 0
+            avg_counter = 0
+
+            for treshold_row_index in range(row_index - r, row_index + r + 1):
+                for treshold_column_index in range(column_index - r, column_index + r + 1):
+                    print("treshold_row_index: " + str(treshold_row_index))
+                    print("treshold_column_index: " + str(treshold_column_index))
+
+                    if (treshold_row_index < 0 or treshold_row_index >= amnt_of_rows) or (
+                            treshold_column_index < 0 or treshold_column_index >= amnt_of_clmns):
+                        avg += blurred[row_index][column_index]
+                    else:
+                        avg += blurred[treshold_row_index][treshold_column_index]
+                    
+                    avg_counter += 1
+            
+            treshold[row_index][column_index] = (avg//avg_counter)
+
+            if treshold[row_index][column_index] - c > blurred[row_index][column_index]:
+                edged[row_index][column_index] = 0
+            else:
+                edged[row_index][column_index] = 255
+
+    return edged
+
 
 
 if __name__ == "__main__":
-    img = ex5_helper.load_image("examples/girl.jpg")
-    separated = separate_channels(img)
+    img = ex5_helper.load_image("examples/ziggy.jpg")
+    # separated = separate_channels(img)
+
+    # img = get_edges([[200, 50, 200]], 3, 3, 10)
+    # print(img)
+    # print(img == [[255, 0, 255]])
+
+    print("got image")
+    
+    img = RGB2grayscale(img)
+    print("grayed image")
+    ex5_helper.show_image(img)
+
+    img = get_edges(img, 5, 13, 11)
+    print("edged image")
+    ex5_helper.show_image(img)
     
     # ex5_helper.show_image(img)
     # blured = apply_kernel(separated[0], blur_kernel(3))
     # grayed = RGB2grayscale(img)
-    separated[0] = resize(separated[0], 16, 16)
-    separated[1] = resize(separated[1], 16, 16)
-    separated[2] = resize(separated[2], 16, 16)
+    # separated[0] = resize(separated[0], 16, 16)
+    # separated[1] = resize(separated[1], 16, 16)
+    # separated[2] = resize(separated[2], 16, 16)
 
-    combined = combine_channels(separated)
+    # combined = combine_channels(separated)
 
-    ex5_helper.show_image(combined)
+    # ex5_helper.show_image(combined)
     # ex5_helper.show_image(separated[0])
 
     # img = rotate_90(img, "L")
