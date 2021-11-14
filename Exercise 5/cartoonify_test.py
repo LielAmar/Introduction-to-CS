@@ -46,9 +46,7 @@ def test_bilinear_interpolation_function():
     assert bilinear_interpolation([[0, 64], [128, 255]], 0.5, 1) == 160
 
 def test_resize_function():
-  assert resize([[0, 64], [128, 255]], 3, 3) == [[0, 21, 43], [43, 71, 99], [85, 121, 156]]
-
-print("resized: " + str(resize([[0, 64], [128, 255]], 3, 3)))
+  assert resize([[0, 64], [128, 255]], 3, 3) == [[0, 32, 64], [64, 112, 160], [128, 192, 255]]
 
 def test_rotate_90_function():
   assert rotate_90([[1, 2, 3], [4, 5, 6]], 'R') == [[4, 1], [5, 2], [6, 3]]
