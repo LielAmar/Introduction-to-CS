@@ -2,7 +2,22 @@ import math
 import time
 
 import ex5_helper
-import cartoonify_utils as utils
+
+# === Utils ===
+def check_within(x: int, y: int, min_x: int, min_y: int, max_x: int, max_y: int) -> bool:
+    return x >= min_x and x < max_x and y >= min_y and y < max_y
+
+
+class Pixel:
+    def __init__(self, y: int, x: int, value: int):
+        self.y = y
+        self.x = x
+        self.value = value
+    
+    def is_outside_border(self, max_y: int, max_x: int) -> bool:
+        return not check_within(self.x, self.y, 0, 0, max_x, max_y)
+
+
 
 def separate_channels(image: list) -> list:
     """
@@ -111,7 +126,7 @@ def apply_kernel(image: list, kernel: list) -> list:
                     pixel_column = column_index + j
 
                     # If the checked pixel is outside the image's border, set it to the central pixel
-                    if not utils.check_within(pixel_row, pixel_column, 0, 0,
+                    if not check_within(pixel_row, pixel_column, 0, 0,
                             len(image), len(image[row_index])):
                         pixel_row = row_index
                         pixel_column = column_index
@@ -142,10 +157,10 @@ def bilinear_interpolation(image: list, y: float, x: float) -> int:
 
     # Getting the indexes of all 4 nearby pixels
     nearby_pixels = {
-        "top_left":  utils.Pixel(y_rounded,     x_rounded,     0),
-        "bot_left":  utils.Pixel(y_rounded + 1, x_rounded,     0),
-        "top_right": utils.Pixel(y_rounded,     x_rounded + 1, 0),
-        "bot_right": utils.Pixel(y_rounded + 1, x_rounded + 1, 0)
+        "top_left":  Pixel(y_rounded,     x_rounded,     0),
+        "bot_left":  Pixel(y_rounded + 1, x_rounded,     0),
+        "top_right": Pixel(y_rounded,     x_rounded + 1, 0),
+        "bot_right": Pixel(y_rounded + 1, x_rounded + 1, 0)
     }
 
     # Looping over all nearby pixel. If a pixel is outside the image borders
@@ -246,7 +261,7 @@ def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
             for i in range(row_idx - r, row_idx + r + 1 + 1):
                 for j in range(column_idx - r, column_idx + r + 1 + 1):
 
-                    if utils.check_within(i, j, 0, 0, amnt_of_rows, amnt_of_clmns):
+                    if check_within(i, j, 0, 0, amnt_of_rows, amnt_of_clmns):
                         avg.append(blurred[i][j])
                     else:
                         avg.append(blurred[row_idx][column_idx])
