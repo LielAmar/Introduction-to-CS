@@ -127,18 +127,23 @@ def apply_kernel(image: list, kernel: list) -> list:
     return new_image
 
 
-class Pixel:
-    def __init__(self, y: int, x: int, value: int):
-        self.y = y
-        self.x = x
-        self.value = value
-
 def bilinear_interpolation(image: list, y: float, x: float) -> int:
     """
     Invokes the bilinear interpolation resampling method.
     Calculates a pixel's value through percentages based on how close
     the pixel is to nearby pixels
     """
+
+    # Inner Pixel helper class
+    class Pixel:
+        def __init__(self, y: int, x: int, value: int):
+            self.y = y
+            self.x = x
+            self.value = value
+    
+        def is_outside_border(self, max_y: int, max_x: int) -> bool:
+            return (self.y < 0 or self.y >= max_y
+                or self.x < 0 or self.x >= max_x)
 
     y_rounded = math.floor(y)
     x_rounded = math.floor(x)
@@ -158,14 +163,9 @@ def bilinear_interpolation(image: list, y: float, x: float) -> int:
     # we want to set its calculated value to 0 so it doesn't affect the final
     # calculation of the updated pixel value
     for key, pixel in nearby_pixels.items():
-        if (pixel.y < 0 or pixel.y >= len(image)
-                or pixel.x < 0 or pixel.x >= len(image[y_rounded])):
-            # print("x: " + str(x_rounded))
-            # print("y: " + str(y_rounded))
-            # Pixel is outside the image's border
+        if pixel.is_outside_border(len(image), len(image[0])):
             pixel.value = image[y_rounded][x_rounded]
         else:
-            # Pixel is inside the image's border
             pixel.value = image[pixel.y][pixel.x]
 
     # Calculating the pixel's new value
@@ -192,10 +192,10 @@ def resize(image: list, new_height: int, new_width: int) -> list:
     for row_index in range(new_height):
         updated_row = []
         # TODO check what's going on with 0/1 in this function & tests
-        relative_y_val = ((row_index) / new_height) * (amnt_of_rows - 0)
+        relative_y_val = ((row_index) / (new_height - 1)) * (amnt_of_rows - 1)
 
         for column_index in range(new_width):
-            relative_x_val = ((column_index) / new_width) * (amnt_of_columns - 0)
+            relative_x_val = ((column_index) / (new_width - 1)) * (amnt_of_columns - 1)
 
             updated_row.append(bilinear_interpolation(image, relative_y_val, relative_x_val))
 
@@ -227,7 +227,7 @@ def rotate_90(image: list, direction: str) -> list:
 
 
 if __name__ == "__main__":
-    img = ex5_helper.load_image("examples/test_!.jpg")
+    img = ex5_helper.load_image("examples/girl.jpg")
     separated = separate_channels(img)
     
     # ex5_helper.show_image(img)
