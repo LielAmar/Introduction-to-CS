@@ -1,6 +1,6 @@
 import math
 import sys
-import time
+import copy
 
 import ex5_helper
 
@@ -120,7 +120,7 @@ def apply_kernel(image: list, kernel: list) -> list:
 
             for i in range(0 - int((kernel_size / 2)), 0 + int((kernel_size / 2) + 1)):
                 for j in range(0 - int((kernel_size / 2 )), 0 + int((kernel_size / 2) + 1)):
-                    kernel_value = kernel[i+1][j+1]
+                    kernel_value = kernel[i][j]
 
                     pixel_row = row_index + i
                     pixel_column = column_index + j
@@ -214,6 +214,7 @@ def resize_colored_image(image: list, new_height: int, new_width: int) -> list:
     Resizes a colored image by breaking it down to separated channels,
     resizing each channel and then combining the channels
     """
+    
     separated = separate_channels(image)
 
     for channel_idx in range(len(separated)):
@@ -234,13 +235,14 @@ def rotate_90(image: list, direction: str) -> list:
     if direction == "R":
         for row_index in range(len(image) - 1, -1, -1):
             for column_index in range(0, len(image[row_index])):
-                rotated[column_index].append(image[row_index][column_index])
+                rotated[column_index].append(
+                    copy.deepcopy(image[row_index][column_index]))
                 
     elif direction == "L":
         for row_index in range(0, len(image)):
             for column_index in range(len(image[row_index]) - 1, -1, -1):
                 rotated[len(image[row_index]) - 1 - column_index].append(
-                            image[row_index][column_index])
+                    copy.deepcopy(image[row_index][column_index]))
 
     return rotated
 
@@ -345,6 +347,7 @@ def black_and_white_to_mask(edged: list, interval: int) -> list:
     """
     A util function to turn a black & white image into a mask
     """
+
     masked = []
 
     for row in edged:
@@ -363,6 +366,7 @@ def cartoonify(image: list, blur_size: int, th_block_size: int,
     """
     Cartoonifies the given image at ${image} with the given parameters
     """
+
     quantized = quantize_colored_image(image, quant_num_shades)
 
     grayed = RGB2grayscale(image)
@@ -378,8 +382,6 @@ def cartoonify(image: list, blur_size: int, th_block_size: int,
 
 
 def run_and_save(args: list):
-    start = time.time()
-
     source = args[1]
     dest = args[2]
     max_width = int(args[3])
@@ -388,94 +390,21 @@ def run_and_save(args: list):
     th_c = int(args[6])
     quant_num_shades = int(args[7])
 
-    print("stage 1")
     # Loading the image
     image = ex5_helper.load_image(source)
 
-    print("stage 2")
     # Calculating max width and max height of the target image
     max_height = int(len(image) // (len(image[0]) / max_width))
 
-    print("stage 3")
     # resizing
     image = resize_colored_image(image, max_height, max_width)
 
-    print("stage 4")
     # Applying cartoonify
     image = cartoonify(image, blur_size, th_block_size, th_c, quant_num_shades)
 
-    print("stage 5")
     ex5_helper.save_image(image, dest)
-
-    end = time.time()
-    print("time taken: " + str(int((end - start))) + " seconds")
 
 if __name__ == "__main__":
     args = sys.argv
 
     run_and_save(args)
-
-
-    # start = time.time()
-
-    # img = ex5_helper.load_image("examples/ziggy.jpg")
-    # print("got image")
-
-    # separated = separate_channels(img)
-    # separated[0] = resize(separated[0], 330, 586)
-    # separated[1] = resize(separated[1], 330, 586)
-    # separated[2] = resize(separated[2], 330, 586)
-    # img = combine_channels(separated)
-
-    # img = cartoonify(img, 5, 13, 11, 8)
-
-    # img = quantize_colored_image(img, 8)
-    # print("quantized image")
-
-    # mask = separate_channels(img)[0]
-
-    # for row_idx in range(len(mask)):
-    #     for col_idx in range(len(mask[0])):
-    #         mask[row_idx][col_idx] = mask[row_idx][col_idx] / 255
-
-    # img = add_mask(img, img, mask)
-
-    # r, g, b = separate_channels(img)
-    # print("separated channels")
-    # r = quantize(r, 8)
-    # g = quantize(g, 8)
-    # b = quantize(b, 8)
-    # img = combine_channels([r, g, b])
-    
-    # img = RGB2grayscale(img)
-    # print("grayed image")
-    # ex5_helper.show_image(img)
-
-    # img = resize(img, 258, 460)
-    # print("resized image")
-    # ex5_helper.show_image(img)
-
-    # img = get_edges(img, 5, 13, 11)
-    # print("edged image")
-    
-    # ex5_helper.show_image(img)
-    # end = time.time()
-
-    # print("time taken: " + str(end - start))
-    
-    # ex5_helper.show_image(img)
-    # blured = apply_kernel(separated[0], blur_kernel(3))
-    # grayed = RGB2grayscale(img)
-    # separated[0] = resize(separated[0], 16, 16)
-    # separated[1] = resize(separated[1], 16, 16)
-    # separated[2] = resize(separated[2], 16, 16)
-
-    # combined = combine_channels(separated)
-
-    # ex5_helper.show_image(combined)
-    # ex5_helper.show_image(separated[0])
-
-    # img = rotate_90(img, "L")
-    # ex5_helper.show_image(img)
-    
-    # print(resize([[0,1],[2,3]],10,10))
