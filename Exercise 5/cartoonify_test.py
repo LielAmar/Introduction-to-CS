@@ -52,6 +52,16 @@ def test_rotate_90_function():
   assert rotate_90([[1, 2, 3], [4, 5, 6]], 'R') == [[4, 1], [5, 2], [6, 3]]
   assert rotate_90([[1, 2, 3], [4, 5, 6]], 'L') == [[3, 6], [2, 5], [1, 4]]
 
+def test_get_edges_function():
+    assert get_edges([[200, 50, 200]], 3, 3, 10) == [[255, 0, 255]]
+
+def test_quantize_function():
+    assert quantize([[0, 50, 100], [150, 200, 250]], 8) == [[0, 32, 96], [128, 191, 223]]
+
+def test_add_mask_function():
+    assert add_mask([[50, 50, 50]], [[200, 200, 200]], [[0, 0.5, 1]]) == [[200, 125, 50]]
+    
+
 
 # print(rotate_90([[1, 2, 3], [4, 5, 6]], 'R') == [[4, 1], [5, 2], [6, 3]])
 # print(rotate_90([[1, 2, 3], [4, 5, 6]], 'L') == [[3, 6], [2, 5], [1, 4]])

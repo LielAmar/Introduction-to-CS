@@ -1,4 +1,5 @@
 import math
+import sys
 import time
 
 import ex5_helper
@@ -16,7 +17,6 @@ class Pixel:
     
     def is_outside_border(self, max_y: int, max_x: int) -> bool:
         return not check_within(self.x, self.y, 0, 0, max_x, max_y)
-
 
 
 def separate_channels(image: list) -> list:
@@ -209,6 +209,19 @@ def resize(image: list, new_height: int, new_width: int) -> list:
     return updated_image
 
 
+def resize_colored_image(image: list, new_height: int, new_width: int) -> list:
+    """
+    Resizes a colored image by breaking it down to separated channels,
+    resizing each channel and then combining the channels
+    """
+    separated = separate_channels(image)
+
+    for channel_idx in range(len(separated)):
+        separated[channel_idx] = resize(separated[channel_idx], new_height, new_width)
+
+    return combine_channels(separated)
+
+
 def rotate_90(image: list, direction: str) -> list:
     """
     Rotates the given image in ${image} by 90 degrees in ${direction}
@@ -242,7 +255,7 @@ def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
 
     amnt_of_rows = len(blurred)
     amnt_of_clmns = len(blurred[0])
-
+    
     r = block_size // 2
 
     edged: list = []
@@ -252,21 +265,23 @@ def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
     # (row_idx - r) to (row_idx + r + 2) and (column_idx - r) to (column_idx + r + 2)
     #   For every inner iteration we add check whether the pixel has a valid position
     #   If it does, we add to the avarage calculation, else we add the outer pixel's value
-    for row_idx in range(amnt_of_rows - 1):
+    for row_idx in range(amnt_of_rows):
         row = []
 
-        for column_idx in range(amnt_of_clmns - 1):
-            avg = []
+        for column_idx in range(amnt_of_clmns):
+            avg = 0
+            counter = 0
 
             for i in range(row_idx - r, row_idx + r + 1 + 1):
                 for j in range(column_idx - r, column_idx + r + 1 + 1):
 
+                    counter += 1
                     if check_within(i, j, 0, 0, amnt_of_rows, amnt_of_clmns):
-                        avg.append(blurred[i][j])
+                        avg += blurred[i][j]
                     else:
-                        avg.append(blurred[row_idx][column_idx])
+                        avg += blurred[row_idx][column_idx]
 
-            treshold = sum(avg) / len(avg)
+            treshold = avg / counter
             row.append(0 if treshold - c > blurred[row_idx][column_idx] else 255)
 
         edged.append(row)
@@ -274,28 +289,179 @@ def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
     return edged
 
 
+def quantize(image: list, N: int) -> list:
+    """
+    Reduces the amount of shades of a single channel of the given image in ${image}
+    """
 
-if __name__ == "__main__":
+    quantized: list = []
+    
+    for row in image:
+        quantized_row = []
+
+        for column in row:
+            quantized_row.append(round(math.floor(column*(N/255))*(255/N)))
+
+        quantized.append(quantized_row)
+
+    return quantized
+
+
+def quantize_colored_image(image: list, N: int) -> list:
+    """
+    Reduces the amount of shades of a all channels of the given image in ${image}
+    """
+
+    separated = separate_channels(image)
+
+    for channel_idx in range(len(separated)):
+        separated[channel_idx] = quantize(separated[channel_idx], N)
+    
+    return combine_channels(separated)
+
+
+def add_mask(image1: list, image2: list, mask: list) -> list:
+    """
+    Adds a mask of two images ${image1} and ${image2}
+    """
+
+    masked: list = []
+
+    for row_idx in range(len(image1)):
+        row = []
+
+        for column_idx in range(len(image1[row_idx])):
+            img_1_val = image1[row_idx][column_idx] * mask[row_idx][column_idx]
+            img_2_val = image2[row_idx][column_idx] * (1 - mask[row_idx][column_idx])
+
+            row.append(round(img_1_val + img_2_val))
+
+        masked.append(row)
+
+    return masked
+
+
+def black_and_white_to_mask(edged: list, interval: int) -> list:
+    """
+    A util function to turn a black & white image into a mask
+    """
+    masked = []
+
+    for row in edged:
+        updated_row = []
+
+        for column in row:
+            updated_row.append(column / interval)
+
+        masked.append(updated_row)
+
+    return masked
+
+
+def cartoonify(image: list, blur_size: int, th_block_size: int,
+        th_c: int, quant_num_shades: int) -> list:
+    """
+    Cartoonifies the given image at ${image} with the given parameters
+    """
+    quantized = quantize_colored_image(image, quant_num_shades)
+
+    grayed = RGB2grayscale(image)
+    edged = get_edges(grayed, blur_size, th_block_size, th_c)
+
+    mask = black_and_white_to_mask(edged, 255)
+
+    separated = separate_channels(quantized)
+    for channel_idx in range(len(separated)):
+        separated[channel_idx] = add_mask(separated[channel_idx], edged, mask)
+
+    return combine_channels(separated)
+
+
+def run_and_save(args: list):
     start = time.time()
 
-    img = ex5_helper.load_image("examples/ziggy.jpg")
-    print("got image")
+    source = args[1]
+    dest = args[2]
+    max_width = int(args[3])
+    blur_size = int(args[4])
+    th_block_size = int(args[5])
+    th_c = int(args[6])
+    quant_num_shades = int(args[7])
 
-    img = RGB2grayscale(img)
-    print("grayed image")
-    # ex5_helper.show_image(img)
+    print("stage 1")
+    # Loading the image
+    image = ex5_helper.load_image(source)
 
-    img = resize(img, 258, 460)
-    print("resized image")
-    # ex5_helper.show_image(img)
+    print("stage 2")
+    # Calculating max width and max height of the target image
+    max_height = int(len(image) // (len(image[0]) / max_width))
 
-    img = get_edges(img, 5, 13, 11)
-    print("edged image")
-    ex5_helper.show_image(img)
+    print("stage 3")
+    # resizing
+    image = resize_colored_image(image, max_height, max_width)
+
+    print("stage 4")
+    # Applying cartoonify
+    image = cartoonify(image, blur_size, th_block_size, th_c, quant_num_shades)
+
+    print("stage 5")
+    ex5_helper.save_image(image, dest)
 
     end = time.time()
+    print("time taken: " + str(int((end - start))) + " seconds")
 
-    print("time taken: " + str(end - start))
+if __name__ == "__main__":
+    args = sys.argv
+
+    run_and_save(args)
+
+
+    # start = time.time()
+
+    # img = ex5_helper.load_image("examples/ziggy.jpg")
+    # print("got image")
+
+    # separated = separate_channels(img)
+    # separated[0] = resize(separated[0], 330, 586)
+    # separated[1] = resize(separated[1], 330, 586)
+    # separated[2] = resize(separated[2], 330, 586)
+    # img = combine_channels(separated)
+
+    # img = cartoonify(img, 5, 13, 11, 8)
+
+    # img = quantize_colored_image(img, 8)
+    # print("quantized image")
+
+    # mask = separate_channels(img)[0]
+
+    # for row_idx in range(len(mask)):
+    #     for col_idx in range(len(mask[0])):
+    #         mask[row_idx][col_idx] = mask[row_idx][col_idx] / 255
+
+    # img = add_mask(img, img, mask)
+
+    # r, g, b = separate_channels(img)
+    # print("separated channels")
+    # r = quantize(r, 8)
+    # g = quantize(g, 8)
+    # b = quantize(b, 8)
+    # img = combine_channels([r, g, b])
+    
+    # img = RGB2grayscale(img)
+    # print("grayed image")
+    # ex5_helper.show_image(img)
+
+    # img = resize(img, 258, 460)
+    # print("resized image")
+    # ex5_helper.show_image(img)
+
+    # img = get_edges(img, 5, 13, 11)
+    # print("edged image")
+    
+    # ex5_helper.show_image(img)
+    # end = time.time()
+
+    # print("time taken: " + str(end - start))
     
     # ex5_helper.show_image(img)
     # blured = apply_kernel(separated[0], blur_kernel(3))
