@@ -318,8 +318,8 @@ def get_edges(image: list, blur_size: int, block_size: int, c: int) -> list:
             avg = 0
             counter = 0
 
-            for i in range(row_idx - r, row_idx + r + 1 + 1):
-                for j in range(column_idx - r, column_idx + r + 1 + 1):
+            for i in range(row_idx - r, row_idx + r + 1):
+                for j in range(column_idx - r, column_idx + r + 1):
 
                     counter += 1
                     if check_within(i, j, 0, 0, amnt_of_rows, amnt_of_clmns):
