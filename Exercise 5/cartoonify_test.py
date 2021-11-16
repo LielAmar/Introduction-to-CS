@@ -95,3 +95,32 @@ def test_add_mask_function():
 # combine_channels([[[1], [1]], [[2], [2]]]) == [[[1, 2]], [[1,2]]]
 # separate_channels([[[1, 2]]]) == [[[1]], [[2]]]
 # blur_kernel(3) == [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]]
+
+def local_tests():
+    # kernel = [[0.01, 0.02, 0.03], [0.04, 0.05, 0.06], [0.07, 0.08, 0.09]]
+    # image = [[67, 122, 70], [214, 89, 147]]
+    # expected = [[47, 56, 41], [83, 48, 62]]
+    # result = apply_kernel(image, kernel)
+
+    # print("expected", expected)
+    # print("result", result)
+    # print("equal: ", result == expected)
+
+    image = [[67, 122, 70], [214, 89, 147]]
+    expected = 114
+    result = bilinear_interpolation(image, 1.3, 0.8)
+
+    print("expected", expected)
+    print("result", result)
+    print("equal? ", result == expected)
+
+    image = [[0, 64], [128, 255]]
+    expected = [[0, 32, 64], [64, 112, 160], [128, 192, 255]]
+    result = resize(image, 3, 3)
+
+    print("expected", expected)
+    print("result", result)
+    print("equal? ", result == expected)
+
+if __name__ == "__main__":
+    local_tests()

@@ -1,13 +1,27 @@
+#################################################################
+# FILE : cartoonify.py
+# WRITER : Liel Amar, lielamar, 211771993
+# EXERCISE : intro2cs2 ex5 2021
+# DESCRIPTION: Image processing
+# # STUDENTS I DISCUSSED THE EXERCISE WITH:
+# WEB PAGES I USED:
+# NOTES:
+#################################################################
+
 import math
 import sys
 import copy
 
 import ex5_helper
 
+# === Constants ===
+GRAYSCALE_RED   = 0.299
+GRAYSCALE_GREEN = 0.587
+GRAYSCALE_BLUE  = 0.114
+
 # === Utils ===
 def check_within(x: int, y: int, min_x: int, min_y: int, max_x: int, max_y: int) -> bool:
     return x >= min_x and x < max_x and y >= min_y and y < max_y
-
 
 class Pixel:
     def __init__(self, y: int, x: int, value: int):
@@ -18,7 +32,14 @@ class Pixel:
     def is_outside_border(self, max_y: int, max_x: int) -> bool:
         return not check_within(self.x, self.y, 0, 0, max_x, max_y)
 
+    def to_string(self) -> str:
+        return "y: " + str(self.y) + ", x: " + str(self.x) + ", value: " + str(self.value)
 
+def create_nested_list(inner_rows: int, inner_columns: int) -> list:
+    return [[[] for _ in range(inner_columns)] for _ in range(inner_rows)]
+
+
+# === Cartoonify ===
 def separate_channels(image: list) -> list:
     """
     Breaks down the a 3d array into a list of 2d arrays
@@ -29,7 +50,8 @@ def separate_channels(image: list) -> list:
     # Creates a sub-list for every channel
     amnt_of_chnls = len(image[0][0])
 
-    separated: list = [[] for _ in range(amnt_of_chnls)]
+    # separated: list = [[] for _ in range(amnt_of_chnls)]
+    separated: list = create_nested_list(amnt_of_chnls, 0)
 
     # Loops over all rows in ${image} and appends a new array for each channel in ${separated}
     # Then it loops over all columns in ${image} and appends that matching index's value to
@@ -55,7 +77,8 @@ def combine_channels(channels: list) -> list:
     amnt_of_rows = len(channels[0])
     amnt_of_clmns = len(channels[0][0])
 
-    combined: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+    # combined: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+    combined: list = create_nested_list(amnt_of_rows, amnt_of_clmns)
 
     # Loops over all rows in ${channels} and appends X arrays for each column of each row in ${channels}
     # Then it loops over all channels and appends that value to the appropriate column in ${combined}
@@ -76,13 +99,15 @@ def RGB2grayscale(colored_image: list) -> list:
     amnt_of_rows = len(colored_image)
     amnt_of_clmns = len(colored_image[0])
 
-    grayed_image: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+    # grayed_image: list = [[[] for _ in range(amnt_of_clmns)] for _ in range(amnt_of_rows)]
+    grayed_image: list = create_nested_list(amnt_of_rows, amnt_of_clmns)
 
     for row_index in range(amnt_of_rows):
         for column_index in range(amnt_of_clmns):
             column = colored_image[row_index][column_index]
 
-            updated_value = round(column[0] * 0.299 + column[1] * 0.587 + column[2] * 0.114)
+            updated_value = round(column[0] * GRAYSCALE_RED + column[1] * 
+                    GRAYSCALE_GREEN + column[2] * GRAYSCALE_BLUE)
             grayed_image[row_index][column_index] = updated_value
 
     return grayed_image
@@ -93,7 +118,8 @@ def blur_kernel(size: int) -> list:
     Creates a kernel blur array of size
     """
 
-    kernel_array: list = [[] for _ in range(size)]
+    # kernel_array: list = [[] for _ in range(size)]
+    kernel_array: list = create_nested_list(size, 0)
 
     for row_index in range(len(kernel_array)):
         value = 1 / (size ** 2)
@@ -110,17 +136,19 @@ def apply_kernel(image: list, kernel: list) -> list:
 
     kernel_size = len(kernel)
 
-    new_image = [[0 for _ in range(len(image[0]))] for _ in range(len(image))]
+    blurred = [[0 for _ in range(len(image[0]))] for _ in range(len(image))]
 
     # Loops over all rows and columns and updating the pixel's value
     # The updated value is calculated by nearby pixels in the inner double-loop.
-    for row_index in range(len(new_image)):
+    for row_index in range(len(blurred)):
         for column_index in range(len(image[row_index])):
             updated_pixel_value = 0
 
-            for i in range(0 - int((kernel_size / 2)), 0 + int((kernel_size / 2) + 1)):
-                for j in range(0 - int((kernel_size / 2 )), 0 + int((kernel_size / 2) + 1)):
-                    kernel_value = kernel[i][j]
+            loop_modifier = int((kernel_size / 2))
+
+            for i in range(0 - loop_modifier, 0 + loop_modifier + 1):
+                for j in range(0 - loop_modifier, 0 + loop_modifier + 1):
+                    kernel_value = kernel[i + loop_modifier][j + loop_modifier]
 
                     pixel_row = row_index + i
                     pixel_column = column_index + j
@@ -137,9 +165,9 @@ def apply_kernel(image: list, kernel: list) -> list:
             updated_pixel_value = max(0, updated_pixel_value)
             updated_pixel_value = min(255, updated_pixel_value)
             
-            new_image[row_index][column_index] = updated_pixel_value
+            blurred[row_index][column_index] = updated_pixel_value
 
-    return new_image
+    return blurred
 
 
 def bilinear_interpolation(image: list, y: float, x: float) -> int:
@@ -166,22 +194,38 @@ def bilinear_interpolation(image: list, y: float, x: float) -> int:
     # Looping over all nearby pixel. If a pixel is outside the image borders
     # we want to set its calculated value to 0 so it doesn't affect the final
     # calculation of the updated pixel value
-    for pixel in nearby_pixels.values():
+    for key, pixel in nearby_pixels.items():
         if pixel.is_outside_border(len(image), len(image[0])):
-            pixel.value = image[y_rounded][x_rounded]
+            pixel.value = 0
         else:
             pixel.value = image[pixel.y][pixel.x]
 
     # Calculating the pixel's new value
-    updated_pixel_value = (
+    should_calc_y = not (0 > y or y >= len(image) - 1)
+    should_calc_x = not (0 > x or x >= len(image[0]) - 1)
+
+    if should_calc_y and not should_calc_x:
+        updated_pixel_value = (
+              nearby_pixels["top_left"].value  * (1 - y_axis_perc)
+            + nearby_pixels["bot_left"].value  * y_axis_perc
+            + nearby_pixels["top_right"].value * (1 - y_axis_perc)
+            + nearby_pixels["bot_right"].value * y_axis_perc)
+    elif not should_calc_y and should_calc_x:
+        updated_pixel_value = (
+              nearby_pixels["top_left"].value  * (1 - x_axis_perc)
+            + nearby_pixels["bot_left"].value  * (1 - x_axis_perc)
+            + nearby_pixels["top_right"].value * x_axis_perc
+            + nearby_pixels["bot_right"].value * x_axis_perc)
+    else:
+        updated_pixel_value = (
               nearby_pixels["top_left"].value  * (1 - x_axis_perc) * (1 - y_axis_perc)
             + nearby_pixels["bot_left"].value  * y_axis_perc       * (1 - x_axis_perc)
             + nearby_pixels["top_right"].value * x_axis_perc       * (1 - y_axis_perc)
-            + nearby_pixels["bot_right"].value * x_axis_perc       * y_axis_perc
-    )
-
+            + nearby_pixels["bot_right"].value * x_axis_perc       * y_axis_perc)
+        
     updated_pixel_value = round(max(0, min(255, updated_pixel_value)))
     return updated_pixel_value
+
 
 def resize(image: list, new_height: int, new_width: int) -> list:
     """
@@ -327,6 +371,27 @@ def add_mask(image1: list, image2: list, mask: list) -> list:
     Adds a mask of two images ${image1} and ${image2}
     """
 
+    if type(image1[0][0]) == list:
+        separated_1 = separate_channels(image1)
+        separated_2 = separate_channels(image2)
+
+        masked: list = [[] for _ in range(len(separated_1))]
+
+        for channel_idx in range(len(separated_1)):
+            masked[channel_idx] = add_mask_single_channel(
+                    separated_1[channel_idx],
+                    separated_2[channel_idx],
+                    mask)
+        
+        return combine_channels(masked)
+    else:
+        return add_mask_single_channel(image1, image2, mask)
+            
+def add_mask_single_channel(image1: list, image2: list, mask: list) -> list:
+    """
+    Adds a mask of two images ${image1} and ${image2} in a single channel
+    """
+
     masked: list = []
 
     for row_idx in range(len(image1)):
@@ -341,7 +406,6 @@ def add_mask(image1: list, image2: list, mask: list) -> list:
         masked.append(row)
 
     return masked
-
 
 def black_and_white_to_mask(edged: list, interval: int) -> list:
     """
