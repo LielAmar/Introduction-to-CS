@@ -1,0 +1,76 @@
+Harry_Potter.html 22.352671755725183
+Tom_Riddle.html 4.064122137404578
+Albus_Dumbledore.html 1.0160305343511447
+**********
+Hermione_Granger.html 9.144274809160303
+Ronald_Weasley.html 8.128244274809157
+Harry_Potter.html 3.048091603053434
+**********
+Tom_Riddle.html 16.25648854961831
+Harry_Potter.html 15.24045801526717
+Hermione_Granger.html 10.160305343511446
+**********
+Harry_Potter.html 22.352671755725183
+Severus_Snape.html 13.20839694656488
+Neville_Longbottom.html 10.160305343511446
+**********
+Harry_Potter.html 27.432824427480906
+Neville_Longbottom.html 3.048091603053434
+Ronald_Weasley.html 3.048091603053434
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Neville_Longbottom.html -0.5097272213048498
+Ronald_Weasley.html -0.8867228977699408
+Harry_Potter.html -1.909528215549656
+**********
+Harry_Potter.html 5.728584646648968
+Ronald_Weasley.html 0.8867228977699408
+Neville_Longbottom.html 0.5097272213048498
+**********
+Harry_Potter.html 5.728584646648968
+Ronald_Weasley.html 0.8867228977699408
+Neville_Longbottom.html 0.5097272213048498
+**********
+Harry_Potter.html 0.0
+Neville_Longbottom.html 0.0
+Ronald_Weasley.html 0.0
+**********
+Harry_Potter.html 1.909528215549656
+Ronald_Weasley.html 0.8867228977699408
+Neville_Longbottom.html 0.5097272213048498
+**********
+Harry_Potter.html 1.909528215549656
+Ronald_Weasley.html 0.8867228977699408
+Neville_Longbottom.html 0.5097272213048498
+**********
+Harry_Potter.html 1.909528215549656
+Ronald_Weasley.html 0.8867228977699408
+Neville_Longbottom.html 0.5097272213048498
+**********

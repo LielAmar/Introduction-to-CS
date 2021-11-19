@@ -50,6 +50,8 @@ def load_traffic_dictionary(base_url: str,
 
         references = get_refrences_of_page(source, True)
 
+        # return references
+
         # Loops over all references of all pages and updates the amount of occurences
         # of each reference in the dictionary
         # If a certain reference is not included in ${file_name}, we skip it
@@ -58,8 +60,7 @@ def load_traffic_dictionary(base_url: str,
             if not reference in pages:
                 continue
 
-            amnt_of_references = dict[page].get(page, 0) + 1
-            dict[page][reference] = amnt_of_references
+            dict[page][reference] = references.count(reference)
 
     return dict
 

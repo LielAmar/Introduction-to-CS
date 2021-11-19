@@ -49,12 +49,11 @@ def parse_relative_paths_from_file(file_name: str) -> list:
 
     pages = []
 
-    with open(file_name, 'r') as file:
+    with open(file_name, "r") as file:
         for page in file:
             pages.append(page.strip())
 
     return pages
-
 
 
 def save_dict_pickle_format(dict: Dict, target_file: str):
@@ -62,12 +61,12 @@ def save_dict_pickle_format(dict: Dict, target_file: str):
     Saves the dictionary given in ${dict} in ${target_file} as a pickle file
     """
 
-    with open(target_file, 'wb') as file:
+    with open(target_file, "wb") as file:
         pickle.dump(dict, file)
 
 def load_dict_pickle_format(source_file: str) -> Dict:
     """
     Loads a dictionary from the given pickle-formatted file in ${source_file}
     """
-    with open(source_file, 'rb') as file:
+    with open(source_file, "rb") as file:
         return pickle.load(file)

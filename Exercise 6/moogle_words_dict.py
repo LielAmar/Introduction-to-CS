@@ -17,9 +17,7 @@ def get_words_of_page(html: str) -> list:
     p_tags = soup.find_all("p")
 
     for p_tag in p_tags:
-        text = p_tag.get_text()
-
-        for word in text.split():
+        for word in p_tag.text.split():
             words.append(word)
 
     return words
