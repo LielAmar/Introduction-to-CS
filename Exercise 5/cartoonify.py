@@ -448,7 +448,7 @@ def cartoonify(image: list, blur_size: int, th_block_size: int,
 def run_and_save(args: list):
     source = args[1]
     dest = args[2]
-    max_width = int(args[3])
+    max_image_dimentions = int(args[3])
     blur_size = int(args[4])
     th_block_size = int(args[5])
     th_c = int(args[6])
@@ -457,11 +457,21 @@ def run_and_save(args: list):
     # Loading the image
     image = ex5_helper.load_image(source)
 
-    # Calculating max width and max height of the target image
-    max_height = int(len(image) // (len(image[0]) / max_width))
+    needs_resize = (len(image) > max_image_dimentions or len(image[0]) > max_image_dimentions)
+    
+    if needs_resize:
+        height = len(image)
+        width = len(image[0])
 
-    # resizing
-    image = resize_colored_image(image, max_height, max_width)
+        if height > width:
+            width = round(width * (max_image_dimentions / height))
+            height = max_image_dimentions
+        else:
+            height = round(height * (max_image_dimentions / width))
+            width = max_image_dimentions
+
+        # resizing
+        image = resize_colored_image(image, height, width)
 
     # Applying cartoonify
     image = cartoonify(image, blur_size, th_block_size, th_c, quant_num_shades)
