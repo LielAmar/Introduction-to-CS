@@ -1,3 +1,5 @@
+from typing import Any
+
 import ex7_helper as helper
 
 def mult(x: float, y: int) -> float:
@@ -60,9 +62,9 @@ def is_power(b: int, x: int) -> bool:
     Returns whether b is a power of x
     """
 
-    return is_power_helper(b, b, x)
+    return _is_power_helper(b, b, x)
 
-def is_power_helper(b: int, current: int, x: int) -> bool:
+def _is_power_helper(b: int, current: int, x: int) -> bool:
     """
     A helper function to calculate whether b is a power of x
     """
@@ -73,13 +75,41 @@ def is_power_helper(b: int, current: int, x: int) -> bool:
     if current == x:
         return True
 
-    return is_power_helper(b, int(log_mult(current, b)), x)
+    return _is_power_helper(b, int(log_mult(current, b)), x)
+
 
 def reverse(s: str) -> str:
-    return reverse_helper(s, "", len(s) - 1)
+    """
+    Reverses a string
+    """
+    
+    return _reverse_helper(s, "", len(s) - 1)
 
-def reverse_helper(s: str, current: str, index: int):
+def _reverse_helper(s: str, current: str, index: int):
+    """
+    A helper function to reverse append the last character of a string to
+    the beginning of ${current} using recursion
+    """
+
     if index == -1:
         return current
     
-    return reverse_helper(s, helper.append_to_end(current, s[index]), index - 1)
+    return _reverse_helper(s, helper.append_to_end(current, s[index]), index - 1)
+
+
+def play_hanoi(Hanoi: Any, n: int, src: Any, dst: Any, temp: Any) -> None:
+    """
+    Solves the Hanoi Game problem
+    
+    Unfortunately it's too freaking hard to explain why this works in a single
+    comment, so please trust me - IT WORKS!
+
+    For more information, please visit my tablet :)
+    """
+
+    if n <= 0:
+        return
+
+    play_hanoi(Hanoi, n - 1, src, temp, dst)
+    Hanoi.move(src, dst)
+    play_hanoi(Hanoi, n - 1, temp, dst, src)
