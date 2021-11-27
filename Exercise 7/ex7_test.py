@@ -37,3 +37,21 @@ def test_reverse_function_valid_input():
     assert reverse("Amazing") == "gnizamA"
     assert reverse("eDgE cAsE") == "EsAc EgDe"
     assert reverse("ANOtheR OnE?") == "?EnO RehtONA"
+
+def test_number_of_ones_valid_input():
+    assert number_of_ones(13) == 6
+    
+    # 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21
+    assert number_of_ones(21) == 13
+
+    # above + 31, 41, 51
+    assert number_of_ones(59) == 13 + 3
+
+    # above + 61, 71, 81, 91, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112
+    assert number_of_ones(112) == 16 + 22
+    
+    # above + 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130
+    assert number_of_ones(130) == 16 + 22 + 26
+
+def test_number_of_ones_invalid_input():
+    assert number_of_ones(-1) == 0

@@ -113,3 +113,54 @@ def play_hanoi(Hanoi: Any, n: int, src: Any, dst: Any, temp: Any) -> None:
     play_hanoi(Hanoi, n - 1, src, temp, dst)
     Hanoi.move(src, dst)
     play_hanoi(Hanoi, n - 1, temp, dst, src)
+
+
+def number_of_ones(n: int) -> int:
+    """
+    Calculates the amount of times the digit '1' appears in all numbers from
+    1 to n
+    """
+    
+    # base case
+    if n <= 0:
+        return 0
+
+    # returns the number of occurrences of 1 in ${n} and recursively calls
+    # number_of_ones on ${n - 1}
+    return _number_of_ones_helper(n) + number_of_ones(n - 1)
+
+def _number_of_ones_helper(n: int) -> int:
+    """
+    A helper recursive-function to check how many times the digit '1'
+    appears in the given number ${n}
+    """
+
+    # base case
+    if n <= 0:
+        return 0
+
+    occurrences = 0
+
+    # if the remainder of the current number divided by 10 is 1, obviously we
+    # have the digit 1 appearing in the last index of the number
+    if n % 10 == 1:
+        occurrences += 1
+
+    # if the result of division by 10 (no remainder) is not 1, we want to keep
+    # on checking the number divided by 10.
+    # For example:
+    #   15 // 1 = 1
+    #   we'll run the same function on '1' and we'll get a result of one
+    #   in the next iteration
+    if n // 10 != 1:
+        occurrences += _number_of_ones_helper(n // 10)
+    
+    # if the division of n by 10 (no remainder) is 1, we obviously landed on 1
+    # so we add +1 to the occurrences
+    else:
+        occurrences += 1
+
+    # returning the amount of occurrences we got
+    return occurrences
+
+# print(number_of_ones(13))
