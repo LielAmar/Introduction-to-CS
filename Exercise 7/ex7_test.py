@@ -53,5 +53,41 @@ def test_number_of_ones_valid_input():
     # above + 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130
     assert number_of_ones(130) == 16 + 22 + 26
 
-def test_number_of_ones_invalid_input():
-    assert number_of_ones(-1) == 0
+def test_compare_2d_lists_valid_input():
+    test1_lst1 = [[1,2],[4,5,6]]
+    test1_lst2 = [[1,2],[4,5,8]]
+    assert compare_2d_lists(test1_lst1, test1_lst2) == False
+
+    test2_lst1 = test1_lst1
+    test2_lst2 = [[1,2],[4,5,6]]
+    assert compare_2d_lists(test2_lst1, test2_lst2) == True
+
+    test3_lst1 = test2_lst1
+    test3_lst2 = [[1,2],[4,5,8], []]
+    assert compare_2d_lists(test3_lst1, test3_lst2) == False
+
+    test4_lst1 = [[],[], []]
+    test4_lst2 = [[],[]]
+    assert compare_2d_lists(test4_lst1, test4_lst2) == False
+
+    test5_lst1 = test4_lst1
+    test5_lst2 = [[],[], []]
+    assert compare_2d_lists(test5_lst1, test5_lst2) == True
+
+def test_magic_list_func_valid_input():
+    assert magic_list(0) == []
+    assert magic_list(1) == [[]]
+    assert magic_list(2) == [[], [[]]]
+    assert magic_list(3) == [[], [[]], [[[]]]]
+    
+    res4 = magic_list(4)
+    assert res4 == [[], [[]], [[[]]], [[[[]]]]]
+
+    res4[1][0].append(1)
+    assert res4 == [[], [[1]], [[[]]], [[[[]]]]]
+
+    res5 = magic_list(5)
+    assert res5 == [[], [[]], [[[]]], [[[[]]]], [[[[[]]]]]]
+    
+    res5[2][0][0].append(2)
+    assert res5 == [[], [[]], [[[2]]], [[[[]]]], [[[[[]]]]]]

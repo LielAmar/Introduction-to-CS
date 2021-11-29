@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 import ex7_helper as helper
 
@@ -85,7 +85,7 @@ def reverse(s: str) -> str:
     
     return _reverse_helper(s, "", len(s) - 1)
 
-def _reverse_helper(s: str, current: str, index: int):
+def _reverse_helper(s: str, current: str, index: int) -> str:
     """
     A helper function to reverse append the last character of a string to
     the beginning of ${current} using recursion
@@ -163,4 +163,76 @@ def _number_of_ones_helper(n: int) -> int:
     # returning the amount of occurrences we got
     return occurrences
 
-# print(number_of_ones(13))
+
+def compare_2d_lists(l1: List[List[int]], 
+        l2: List[List[int]]) -> bool:
+    """
+    Compares 2 2D lists
+    """
+
+    return _compare_2d_lists_helper(l1, l2, row_idx=0, column_idx=0)
+
+def _compare_2d_lists_helper(l1: List[List[int]],
+        l2: List[List[int]], row_idx: int, column_idx: int) -> bool:
+    """
+    A helper function to check if the 2 given 2D arrays are equal
+    """
+
+    # If the amount of l1's columns/current row is not equal to
+    # l2's columns/current row    
+    if len(l1) != len(l2) or len(l1[0]) != len(l2[0]):
+        return False
+
+    # If we're checking a row that's beyond the lists' limit, we've finished
+    # our comparison
+    if row_idx >= len(l1):
+        return True
+
+    # If the current column is beyond the list's limit, we've finished the
+    # current iteration, so we move on to the next row
+    if column_idx >= len(l1[row_idx]):
+        return _compare_2d_lists_helper(l1, l2, row_idx + 1, 0)
+
+    # we return whether the current element of l1 is equal to the l2's element,
+    # and keep on comparing the next element in the row
+    return (l1[row_idx][column_idx] == l2[row_idx][column_idx]
+            and _compare_2d_lists_helper(l1, l2, row_idx, column_idx + 1))
+
+
+def magic_list(n: int) -> List[Any]:
+    """
+    Returns a magic list of size n
+    """
+    
+
+    return _magic_list_helper(n, [], n)
+
+def _magic_list_helper(n: int, result: List[Any],
+        current_idx: int) -> List[Any]:
+    """
+    A helper function to create the ${current_idx} element of a magic list,
+    using the ${current_idx - 1} item
+    """
+    
+    if current_idx == 0:
+        return result
+
+    # if current_idx == 0:
+        # item = []
+    # else:
+        # item = [] if current_idx == 0 else [ result[current_idx - 1][:] ]
+
+    item = _magic_list_helper_item(n, (n - current_idx))
+    result.append(item)
+
+    return _magic_list_helper(n, result, current_idx - 1)
+
+def _magic_list_helper_item(n: int, current_idx: int) -> List[Any]:
+    """
+    Calculates the ${current_idx} element in a magic list
+    """
+
+    if current_idx == 0:
+        return []
+    
+    return [ _magic_list_helper_item(n, current_idx - 1) ]
