@@ -23,6 +23,9 @@ def test_log_mult_function_valid_input():
 
 def test_is_power_function_valid_input():
     assert is_power(2, 16) == True
+    assert is_power(2, 1) == True
+    assert is_power(10, 0) == False
+    assert is_power(0, 0) == True
     assert is_power(3, 16) == False
     assert is_power(3, 17) == False
     assert is_power(3, 27) == True
@@ -78,16 +81,18 @@ def test_magic_list_func_valid_input():
     assert magic_list(0) == []
     assert magic_list(1) == [[]]
     assert magic_list(2) == [[], [[]]]
-    assert magic_list(3) == [[], [[]], [[[]]]]
+    assert magic_list(3) == [[], [[]], [[], [[]]]]
     
     res4 = magic_list(4)
-    assert res4 == [[], [[]], [[[]]], [[[[]]]]]
+    assert res4 == [[], [[]], [[], [[]]], [[], [[]], [[], [[]]]]]
 
     res4[1][0].append(1)
-    assert res4 == [[], [[1]], [[[]]], [[[[]]]]]
+    assert res4 == [[], [[1]], [[], [[]]], [[], [[]], [[], [[]]]]]
 
     res5 = magic_list(5)
-    assert res5 == [[], [[]], [[[]]], [[[[]]]], [[[[[]]]]]]
-    
-    res5[2][0][0].append(2)
-    assert res5 == [[], [[]], [[[2]]], [[[[]]]], [[[[[]]]]]]
+    assert res5 == [[], [[]], [[], [[]]], [[], [[]], [[], [[]]]],
+            [[], [[]], [[], [[]]], [[], [[]], [[], [[]]]]]]
+
+    res5[2][0].append(2)
+    assert res5 == [[], [[]], [[2], [[]]], [[], [[]], [[], [[]]]],
+            [[], [[]], [[], [[]]], [[], [[]], [[], [[]]]]]]
