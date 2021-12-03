@@ -86,43 +86,48 @@ def solve_puzzle(constraints_set: Set[Constraint], n: int, m: int) -> Optional[P
 
 def solve_puzzle_helper(picture: Picture, constraints_set: Set[Constraint],
         row_idx: int, col_idx: int) -> Optional[Picture]:
+    """
+    Uses backtracing to find a solution to ${picture}, taking ${constraints_set}
+    in account.
+    
+    If we reach a dead-end, meaning the status of our picutre is INVALID, we can
+    automatically drop it.
+    If we get a VALID status, we found a solution and we want to return it.
+    Otherwise, we keep on looking and testing different values for each cell,
+    and always advance our indexes
+    """
 
     status = check_constraints(picture, constraints_set)
-   
-    print("checking picture[", row_idx, "][", col_idx, "]")
-    print("picture", picture)
-    print("status", status)
-    print("=====")
 
+    # Checks the status of the current picture
     if status == INVALID:
         return None
     elif status == VALID:
         return picture
 
+    # If we reached the end of the row/rows, we want to quit/move on to the next row
     if row_idx == len(picture):
         return None
-    
-    if col_idx == len(picture[row_idx]):
+    elif col_idx == len(picture[row_idx]):
         return solve_puzzle_helper(picture, constraints_set, row_idx + 1, 0)
     
+    # Backtracing with the value of 0 in our current index
     picture[row_idx][col_idx] = 0
     res = solve_puzzle_helper(picture, constraints_set, row_idx, col_idx + 1)
+    # If we got a solution we want to stop and return it
     if res != None:
         return res
 
+    # Backtracing with the value of 1 in our current index
     picture[row_idx][col_idx] = 1
     res = solve_puzzle_helper(picture, constraints_set, row_idx, col_idx + 1)
+    # If we got a solution we want to stop and return it
     if res != None:
         return res
 
+    # revert our changes and go back in the recursion hierarchy
     picture[row_idx][col_idx] = -1
     return None
-
-
-print()
-
-# board = [[0] * 4 for _ in range(3)]
-# print(board)
 
 
 def how_many_solutions(constraints_set: Set[Constraint], n: int, m: int) -> int:
