@@ -13,16 +13,6 @@ def filter_pages_by_words(query: list, ranking_dict: Dict,
     # Loading all pages
     filtered_pages = { page: ranking_dict[page] for page in ranking_dict.keys() }
 
-    for page in filtered_pages.keys():
-        found = False
-
-        for word in words_dict.values():
-            if page in word:
-                found = True
-        
-        if not found:
-            del filtered_pages[page]
-
     # Looping over all words given in the query string and filters out all
     # pages that do not contain the word
     for word in query:
@@ -51,9 +41,12 @@ def sort_pages_by_ranking_and_occurances(query: list, pages: Dict, words_dict: D
     # Calculated using the ranking of each page multiplied by the word with
     # the least amount of occurances for each page
     for page in pages.keys():
-        least_occurances = 1
+        if len(query) == 0:
+            least_occurances = 1
+        else:
+            least_occurances = words_dict[query[0]][page]
 
-        for word in query[:]:
+        for word in query[0:]:
             if not word in words_dict.keys():
                 continue
 
@@ -73,7 +66,8 @@ def sort_pages_by_ranking_and_occurances(query: list, pages: Dict, words_dict: D
 def save_results_to_file(pages: Dict, max_results: int):
     # Saves the result to results.txt
     with open("results.txt", "a") as file:
-        for item in pages[:max_results]:
+        # for item in pages[:max_results]:
+        for item in pages:
             line = item[0] + " " + str(item[1])
 
             print(line)
@@ -90,8 +84,18 @@ def search(args: list) -> None:
     ranking_dict = helper.load_dict_pickle_format(ranking_dict_file)
     words_dict = helper.load_dict_pickle_format(words_dict_file)
 
+    for word in query:
+        if not word in words_dict.keys():
+            query.remove(word)
+
     # Filters all pages and keeps only the pages that contain all words given in query
     filtered_pages = filter_pages_by_words(query, ranking_dict, words_dict)
+
+    # Sorting all pages by their rank
+    filtered_pages = sorted(filtered_pages.items(),
+            key=lambda x: x[1], reverse=True)
+
+    filtered_pages = dict(filtered_pages[:int(max_results)])
 
     # Sorts the remaining pages by their ranking and occurances
     filtered_pages = sort_pages_by_ranking_and_occurances(query, filtered_pages,

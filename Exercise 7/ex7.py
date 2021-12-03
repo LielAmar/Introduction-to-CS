@@ -62,6 +62,9 @@ def is_power(b: int, x: int) -> bool:
     Returns whether b is a power of x
     """
 
+    if x == 1:
+        return True
+
     return _is_power_helper(b, b, x)
 
 def _is_power_helper(b: int, current: int, x: int) -> bool:
@@ -203,36 +206,25 @@ def magic_list(n: int) -> List[Any]:
     """
     Returns a magic list of size n
     """
-    
 
-    return _magic_list_helper(n, [], n)
-
-def _magic_list_helper(n: int, result: List[Any],
-        current_idx: int) -> List[Any]:
-    """
-    A helper function to create the ${current_idx} element of a magic list,
-    using the ${current_idx - 1} item
-    """
-    
-    if current_idx == 0:
-        return result
-
-    # if current_idx == 0:
-        # item = []
-    # else:
-        # item = [] if current_idx == 0 else [ result[current_idx - 1][:] ]
-
-    item = _magic_list_helper_item(n, (n - current_idx))
-    result.append(item)
-
-    return _magic_list_helper(n, result, current_idx - 1)
-
-def _magic_list_helper_item(n: int, current_idx: int) -> List[Any]:
-    """
-    Calculates the ${current_idx} element in a magic list
-    """
-
-    if current_idx == 0:
+    if n == 0:
         return []
     
-    return [ _magic_list_helper_item(n, current_idx - 1) ]
+    return _magic_list_helper(n, 0)
+
+def _magic_list_helper(n: int, idx: int) -> List[Any]:
+    """
+    A helper function to calculate the magic list of ${n} and ${indx}
+    in such way:
+    
+    it calculates the magic list for ${n - 1} and ${idx} and then repeats
+    that to get a new instance of the previous list, then appends it to the previous
+    list
+    """
+
+    if idx == n:
+        return []
+
+    res = _magic_list_helper(n - 1, 0)
+    res.append(_magic_list_helper(n - 1, 0))
+    return res
