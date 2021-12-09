@@ -5,8 +5,11 @@ EMPTY_CELL_CHAR = "_"
 
 class Board:
     """
-    Add a class description here.
-    Write briefly about the purpose of the class
+    A board class for the Rush Hour game.
+    It has the following attributes:
+    - board: A 2D array of characters representing the board
+    - cars: A list of car objects
+    - exit: The target cell of the board
     """
 
     def __init__(self):
@@ -65,7 +68,7 @@ class Board:
             for move in car_moves.items():
                 requirements = car.movement_requirements(move[0])
                 
-                if self.__meets_requirements(requirements):    
+                if self.__is_board_meeting_requirements(requirements):    
                     legal_moves.append((car.get_name(), move[0], move[1]))
 
         return legal_moves
@@ -158,6 +161,10 @@ class Board:
         return False
     
     def __render_car(self, car):
+        """
+        Re-renders the car in the board (removes previous renders)
+        """
+
         # Removing previous render of the car
         for cord in self.cell_list():
             if self.cell_content(cord) == car.get_name():
@@ -174,13 +181,22 @@ class Board:
                 self.__board[cord[0]][cord[1]] = car.get_name()
 
     def __move_in_move_list(self, name, move_key, move_list):
+        """
+        Checks if the given move, ${move_key} for car ${name} is in
+        the given list of moves
+        """
+
         for move in move_list:
             if move[0] == name and move[1] == move_key:
                 return True
         
         return False
 
-    def __meets_requirements(self, requirements):
+    def __is_board_meeting_requirements(self, requirements):
+        """
+        Checks if the board meets the requirements, ${requirements}
+        """
+        
         for cell in requirements:
             if self.cell_content(cell) != None:
                 return False
@@ -192,6 +208,10 @@ class Board:
         return True
 
     def __get_car_by_name(self, name):
+        """
+        Returns the car object with the name ${name}
+        """
+
         for car in self.__cars:
             if car.get_name() == name:
                 return car
@@ -199,4 +219,8 @@ class Board:
         return None
 
     def __is_same_cord(self, cord1, cord2):
+        """
+        Checks if 2 coordinates are the same
+        """
+
         return cord1[0] == cord2[0] and cord1[1] == cord2[1]

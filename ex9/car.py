@@ -12,7 +12,12 @@ RIGHT = "r"
 
 class Car:
     """
-    Add class description here
+    A car object representing a 2D car that can only move in one axis.
+    It has the following attributes:
+    - name: The cars name
+    - length: The cars length
+    - location: The cars head
+    - orientation: The orientation of the car
     """
 
     def __init__(self, name, length, location, orientation):
@@ -28,7 +33,6 @@ class Car:
         self.__length = length
         self.__location = location
         self.__orientation = orientation
-
 
     def car_coordinates(self):
         """

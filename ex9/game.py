@@ -4,7 +4,10 @@ from helper import *
 
 class Game:
     """
-    Add class description here
+    A Rush-Hour game object, implemented using the board and car classes.
+    It has the following attributes:
+    - board: A board object
+    - has_quit: Saves the game state - whether or not the player has quit
     """
 
     def __init__(self, board):
@@ -14,6 +17,7 @@ class Game:
         """
 
         self.__board = board
+        self.__has_quit = False
 
     def __single_turn(self):
         """
@@ -37,8 +41,14 @@ class Game:
 
         user_input = input("""
             Enter the color of the car you want to move,
-            and the direction you want to move in (e.g., (R,u)):
+            and the direction you want to move in (e.g., (R,u))
+            Enter '!' if you want to quit:
             """)
+
+        if user_input == "!":
+            self.__has_quit = True
+            return
+        
         if len(user_input) != 3 or user_input[1] != ",":
             print("""
                 Invalid input. Please enter a valid color and direction.
@@ -66,15 +76,22 @@ class Game:
 
         moves = 0
 
-        while board.cell_content(board.target_location()) == None:
+        while board.cell_content(board.target_location()) == None and not self.__has_quit:
             moves += 1
             self.__single_turn()
 
-        print("Well done! You finished the game in {} moves!".format(str(moves)))
+        if self.__has_quit:
+            print("You quit the game.")
+        else:
+            print("Well done! You finished the game in {} moves!".format(str(moves)))
 
 
     # === UTILS ===
     def __color_has_move(self, color, direction, moves):
+        """
+        Checks if the car ${color} can move to ${direction}
+        """
+
         for move in moves:
             if move[0] == color and move[1] == direction:
                 return True
@@ -95,8 +112,15 @@ if __name__== "__main__":
         if car[0] in VALID_NAMES:
             name = car[0]
             length = car[1][0]
+
+            if length < 2 or length > 4:
+                continue
+
             location = (car[1][1][0], car[1][1][1])
             orientation = car[1][2]
+
+            if not orientation in {0, 1}:
+                continue
 
             car = Car(name, length, location, orientation)
             board.add_car(car)
