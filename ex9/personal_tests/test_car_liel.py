@@ -1,4 +1,4 @@
-def test_car():
+def car():
     car = Car("a", 2, (0, 0), VERTICAL)
     assert car.car_coordinates() == [(0, 0), (1, 0)]
     assert 'u' in car.possible_moves().keys()

@@ -11,7 +11,8 @@ class Game:
         Initialize a new Game object.
         :param board: An object of type board
         """
-        self.board = board
+        
+        self.__board = board
 
     def __single_turn(self):
         """
@@ -41,6 +42,8 @@ class Game:
         pass
 
 import sys
+
+# TODO check car's name
 
 if __name__== "__main__":
     script, path_to_json = sys.argv
