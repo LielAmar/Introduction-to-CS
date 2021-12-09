@@ -2,6 +2,23 @@ import sys
 import requests
 import bs4
 
+from urllib.parse import urlparse
+
+def is_absolute_path(url: str) -> bool:
+    """
+    Checks if the given url at ${url} is absolute
+    """
+
+    return bool(urlparse(url).netloc)
+
+def is_relative_path(url: str) -> bool:
+    """
+    Checks if the given url at ${url} is relative
+    """
+
+    return not is_absolute_path(url)
+
+
 def download_page(url):
     response = requests.get(url)
     
@@ -18,8 +35,10 @@ def get_refrences_of_page(html, trimmed_url):
 
         for a_tag in a_tags:
             href = a_tag.get('href')
-            if not "https://" in href:
+
+            if is_relative_path(href):
                 href = trimmed_url + href
+            
             references.append(href)
 
     return references
