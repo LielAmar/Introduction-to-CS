@@ -47,8 +47,8 @@ def test_how_many_solutions():
     assert how_many_solutions(set(), 2, 2) == 16
 
 
-    assert how_many_solutions_helper([[0, 1], [0, 1], [0, 1], [0, -1], [0, -1]], {(0, 1, 4)}, 0, 0) == 1
-
+    # assert how_many_solutions_helper([[0, 1], [0, 1], [0, 1], [0, -1], [0, -1]], {(0, 1, 4)}, 0, 0) == 1
+    assert how_many_solutions({(0, 1, 2), (0, 0, 0), (1, 0, 0), (2, 0, 0)}, 3, 2) == 1
 
     # Should work for any given A,B
     A = 2
