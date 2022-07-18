@@ -1,0 +1,23 @@
+# Boggle
+Boggle is a board game in which you need to find words in the English Dictionary.
+
+## About Code Structure
+* Incredible OOP utilization, including multi-level inheritance and code-abstraction
+* Logic and design seperation
+* No magic numbers - Constant variables and a constant design pattern
+* Fast and efficient utilities
+* Both generators and iterators implementations
+* Functions that call functions that call functions that call... Okay, you get it. It's recursion.
+* Functions that return an inner function
+* Great API with on point error raising and handling
+* Dynamic bruteforce machanizem for different functions
+
+## Features
+* Custom sounds when playing the game (for windows users)
+* Great design
+* Random cursor for each button!
+* An option to clear your current selection in an instant!
+* Only want to clear to some point? No worries, we got you!
+  All you need to do is to press the button you want to clear up to
+* Dynamic action button
+* Dynamic word bank
