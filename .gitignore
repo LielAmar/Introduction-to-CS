@@ -1,8 +1,11 @@
 .env/
 env/
+venv/
 .pytest_cache/
 __pycache__/
 
 *.zip
 *.rar
 *.txt
+*.pickle
+!requirements.txt

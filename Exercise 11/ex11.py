@@ -316,9 +316,7 @@ def optimal_tree(records, symptoms, depth):
 
 
 if __name__ == "__main__":
-    # print("Hello there :)")
-
-    data = parse_data("big_data.txt")
+    data = parse_data("medium_data.txt")
 
     symptoms = ["cough", "fatigue", "headache", "nausea",
                 "fever", "irritability", "rigidity", "sore_throat"]

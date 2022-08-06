@@ -1,8 +1,3 @@
-# The reason I picked the fourth test to be (0, 0, 0) is because
-# it's an edge case, where all the values are equal.
-# The reason I picked the fifth test to be (-40, 0, 40) is because
-# it's an edge case with opposite numbers - positive & negative numbers
-
 def largest_and_smallest(first_number, second_number, third_number):
     """Returns the largest & smallest numbers"""
     max = min = first_number

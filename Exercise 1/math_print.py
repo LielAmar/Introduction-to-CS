@@ -1,13 +1,3 @@
-#################################################################
-# FILE : math_print.py
-# WRITER : Liel Amar, lielamar, 211771993
-# EXERCISE : intro2cs2 ex1 2020
-# DESCRIPTION: A simple program that...
-# STUDENTS I DISCUSSED THE EXERCISE WITH:
-# WEB PAGES I USED:
-# NOTES:
-#################################################################
-
 import math
 
 def sin_30():
@@ -45,20 +35,6 @@ def e():
 def squares_area():
     # Prints the areas of all squares with a side length of 1 to 10
     print(1*1, 2*2, 3*3, 4*4, 5*5, 6*6, 7*7, 8*8, 9*9, 10*10)
-
-    # print(math.pow(1,2))
-    # print(math.pow(2,2))
-    # print(math.pow(3,2))
-    # print(math.pow(4,2))
-    # print(math.pow(5,2))
-    # print(math.pow(6,2))
-    # print(math.pow(7,2))
-    # print(math.pow(8,2))
-    # print(math.pow(9,2))
-    # print(math.pow(10,2))
-
-    # for i in range(1, 10):
-    #     print(math.pow(i, 2))
 
 
 if __name__ == "__main__" :

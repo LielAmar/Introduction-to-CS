@@ -1,4 +1,3 @@
-
 def calculate_mathematical_expression(first_number, second_number,
                                       operation):
     """Calculates the mathematical expression of 'first_number' and

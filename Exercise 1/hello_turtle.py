@@ -1,13 +1,3 @@
-#################################################################
-# FILE : hello_turtle.py
-# WRITER : Liel Amar, lielamar, 211771993
-# EXERCISE : intro2cs2 ex1 2020
-# DESCRIPTION: A simple program that uses turtle to draw flowers
-#              on a canvas
-# STUDENTS I DISCUSSED THE EXERCISE WITH: 
-# WEB PAGES I USED:
-# NOTES: 
-#################################################################
 import turtle
 
 def intro_example():

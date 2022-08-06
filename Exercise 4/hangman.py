@@ -1,14 +1,3 @@
-#################################################################
-# FILE : hangman.py
-# WRITER : Liel Amar, lielamar, 211771993
-# EXERCISE : intro2cs2 ex4 2021
-# DESCRIPTION: A simple program that mimics the Hangman game
-# # STUDENTS I DISCUSSED THE EXERCISE WITH: Amir Debby
-# WEB PAGES I USED: 
-#   - https://stackoverflow.com/questions/394809/
-# NOTES: 
-#################################################################
-
 import hangman_helper
 
 import copy
