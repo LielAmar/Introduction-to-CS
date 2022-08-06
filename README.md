@@ -64,13 +64,13 @@
   <h2 align="left" style="border-bottom: 1px solid gray">Media</h2>
 
   <div align="left">
-    <img src="./Exercise 5/media/2.jpg" alt="image-processing result" width="300px" />
+    <a href="./Exercise 5"><img src="./Exercise 5/media/2.jpg" alt="image-processing result" width="300px" /></a>
     <br>
-    <img src="./Exercise 7/media/2.png" alt="hanoi end" width="300px" />
+    <a href="./Exercise 7"><img src="./Exercise 7/media/2.png" alt="hanoi end" width="300px" /></a>
     <br>
-    <img src="./Exercise 10/media/1.png" alt="snake" width="300px" />
+    <a href="./Exercise 10"><img src="./Exercise 10/media/1.png" alt="snake" width="300px" /></a>
     <br>
-    <img src="./Exercise 12/media/1.png" alt="boggle" width="300px" />
+    <a href="./Exercise 12"><img src="./Exercise 12/media/1.png" alt="boggle" width="300px" /></a>
   </div>
 </div>
 
