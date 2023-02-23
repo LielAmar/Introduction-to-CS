@@ -20,31 +20,31 @@
   <h2 align="left" style="border-bottom: 1px solid gray">Exercises</h2>
 
   <ul align="left">
-    <li><a href="./Exercise 1"><b>Exercise 1 - Hello Turtle »</b></a></li>
+    <li><a href="./Exercise 01"><b>Exercise 1 - Hello Turtle »</b></a></li>
     <ul><li style="list-style: none;">⤷ Used the built-in Turtle library to do some basic Python</li></ul>
     <br>
-    <li><a href="./Exercise 2"><b>Exercise 2 - Basic Problem Solving »</b></a></li>
+    <li><a href="./Exercise 02"><b>Exercise 2 - Basic Problem Solving »</b></a></li>
     <ul><li style="list-style: none;">⤷ Some basic Python Functions, Operations and Problem Solving</li></ul>
     <br>
-    <li><a href="./Exercise 3"><b>Exercise 3 - Loops »</b></a></li>
+    <li><a href="./Exercise 03"><b>Exercise 3 - Loops »</b></a></li>
     <ul><li style="list-style: none;">⤷ Introduction to Loops and User Input in Python</li></ul>
     <br>
-    <li><a href="./Exercise 4"><b>Exercise 4 - Hangman »</b></a></li>
+    <li><a href="./Exercise 04"><b>Exercise 4 - Hangman »</b></a></li>
     <ul><li style="list-style: none;">⤷ The popular Hangman game implemented in Python</li></ul>
     <br>
-    <li><a href="./Exercise 5"><b>Exercise 5 - Image Processing »</b></a></li>
+    <li><a href="./Exercise 05"><b>Exercise 5 - Image Processing »</b></a></li>
     <ul><li style="list-style: none;">⤷ Introduction to Image Processing in Python</li></ul>
     <br>
-    <li><a href="./Exercise 6"><b>Exercise 6 - Moogle »</b></a></li>
+    <li><a href="./Exercise 06"><b>Exercise 6 - Moogle »</b></a></li>
     <ul><li style="list-style: none;">⤷ Web Scraping and Page Ranking</li></ul>
     <br>
-    <li><a href="./Exercise 7"><b>Exercise 7 - Recursion »</b></a></li>
+    <li><a href="./Exercise 07"><b>Exercise 7 - Recursion »</b></a></li>
     <ul><li style="list-style: none;">⤷ Recursion algorithms</li></ul>
     <br>
-    <li><a href="./Exercise 8"><b>Exercise 8 - Puzzle Solver »</b></a></li>
+    <li><a href="./Exercise 08"><b>Exercise 8 - Puzzle Solver »</b></a></li>
     <ul><li style="list-style: none;">⤷ A Python Puzzle-Solver using Backtracking</li></ul>
     <br>
-    <li><a href="./Exercise 9"><b>Exercise 9 - Rush Hour »</b></a></li>
+    <li><a href="./Exercise 09"><b>Exercise 9 - Rush Hour »</b></a></li>
     <ul><li style="list-style: none;">⤷ The popular Rush Hour game implemented in Python</li></ul>
     <br>
     <li><a href="./Exercise 10"><b>Exercise 10 - Snake »</b></a></li>
