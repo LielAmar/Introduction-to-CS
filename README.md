@@ -64,9 +64,9 @@
   <h2 align="left" style="border-bottom: 1px solid gray">Media</h2>
 
   <div align="left">
-    <a href="./Exercise 5"><img src="./Exercise 5/media/2.jpg" alt="image-processing result" width="300px" /></a>
+    <a href="./Exercise 05"><img src="./Exercise 05/media/2.jpg" alt="image-processing result" width="300px" /></a>
     <br>
-    <a href="./Exercise 7"><img src="./Exercise 7/media/2.png" alt="hanoi end" width="300px" /></a>
+    <a href="./Exercise 07"><img src="./Exercise 07/media/2.png" alt="hanoi end" width="300px" /></a>
     <br>
     <a href="./Exercise 10"><img src="./Exercise 10/media/1.png" alt="snake" width="300px" /></a>
     <br>
